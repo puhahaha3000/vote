@@ -11,11 +11,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.function.Function;
 
 public class CommonDao {
 
-    static ArrayList<?> getArrayListFromQuery(String query, Dao dao) {
-        ArrayList<?> resultArrayList = new ArrayList<>();
+    static <T> ArrayList<T> getArrayListFromQuery(String query, Function<ResultSet, ArrayList<T>> function) {
+        ArrayList<T> resultArrayList = new ArrayList<>();
 
         try {
             Context context = new InitialContext();
@@ -30,7 +31,7 @@ public class CommonDao {
                 preparedStatement = connection.prepareStatement(query);
                 resultSet = preparedStatement.executeQuery();
 
-                resultArrayList = dao.getArrayListWithResultSet(resultSet);
+                resultArrayList = function.apply(resultSet);
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
