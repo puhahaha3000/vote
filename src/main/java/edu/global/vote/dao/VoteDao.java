@@ -5,18 +5,12 @@ import edu.global.vote.dto.VoteDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
-public class VoteDao implements Function<ResultSet, ArrayList<VoteDto>> {
-
-    public ArrayList<VoteDto> getList() {
-        String query = Constant.SELECT_FROM_TBL_VOTE_202005;
-        return CommonDao.getArrayListFromQuery(query, this);
-    }
+public class VoteDao implements Consumer<Map.Entry<PreparedStatement, VoteDto>> {
 
     public void insertVote(HttpServletRequest request, HttpServletResponse response) {
         String query = Constant.QUERY_INSERT_VOTE;
@@ -28,28 +22,24 @@ public class VoteDao implements Function<ResultSet, ArrayList<VoteDto>> {
                 request.getParameter("V_AREA"),
                 request.getParameter("V_CONFIRM")
         );
-        CommonDao.insert(query, voteDto);
+        CommonDao.insert(query, voteDto, this);
     }
 
     @Override
-    public ArrayList<VoteDto> apply(ResultSet resultSet) {
-        ArrayList<VoteDto> voteDtoArrayList = new ArrayList<>();
+    public void accept(Map.Entry<PreparedStatement, VoteDto> preparedStatementVoteDtoEntry) {
+        PreparedStatement preparedStatement = preparedStatementVoteDtoEntry.getKey();
+        VoteDto voteDto = preparedStatementVoteDtoEntry.getValue();
         try {
-            while (resultSet.next()) {
-                voteDtoArrayList.add(
-                        new VoteDto(
-                                resultSet.getString("V_JUMIN"),
-                                resultSet.getString("V_NAME"),
-                                resultSet.getString("M_NO"),
-                                resultSet.getString("V_TIME"),
-                                resultSet.getString("V_AREA"),
-                                resultSet.getString("V_CONFIRM")
-                        )
-                );
-            }
+            preparedStatement.setString(1, voteDto.getVoteJumin());
+            preparedStatement.setString(2, voteDto.getVoteName());
+            preparedStatement.setString(3, voteDto.getMember_No());
+            preparedStatement.setString(4, voteDto.getVoteTime());
+            preparedStatement.setString(5, voteDto.getVoteArea());
+            preparedStatement.setString(6, voteDto.getVoteConfirm());
+            preparedStatement.execute();
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
-        return voteDtoArrayList;
     }
 }

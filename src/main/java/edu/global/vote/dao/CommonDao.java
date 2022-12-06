@@ -11,7 +11,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -58,7 +60,7 @@ public class CommonDao {
         return resultArrayList;
     }
 
-    static void insert(String query, VoteDto voteDto) {
+    static <T> void insert(String query, T dto, Consumer<Map.Entry<PreparedStatement, T>> consumer) {
         try {
             Context context = new InitialContext();
             DataSource dataSource = (DataSource) context.lookup(Constant.CONNECT_POOL);
@@ -69,8 +71,7 @@ public class CommonDao {
             try {
                 connection = dataSource.getConnection();
                 preparedStatement = connection.prepareStatement(query);
-
-
+                consumer.accept(new AbstractMap.SimpleEntry<>(preparedStatement, dto));
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
