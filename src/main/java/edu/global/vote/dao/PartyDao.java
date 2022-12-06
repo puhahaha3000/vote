@@ -10,9 +10,9 @@ import java.util.function.Function;
 
 public class PartyDao implements Function<ResultSet, ArrayList<PartyDto>> {
 
-    public ArrayList<?> getDtoList() {
+    public ArrayList<PartyDto> getList() {
         String query = Constant.SELECT_FROM_TBL_PARTY_202005;
-        return CommonDao.getArrayListFromQuery(query, this);
+        return CommonDao.getArrayListFromQuery(query, this::apply);
     }
 
     @Override
