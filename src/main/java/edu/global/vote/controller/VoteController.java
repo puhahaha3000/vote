@@ -1,8 +1,6 @@
 package edu.global.vote.controller;
 
-import edu.global.vote.command.Command;
-import edu.global.vote.command.MemberListCommand;
-import edu.global.vote.command.VoteSubmitCommand;
+import edu.global.vote.command.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -24,24 +22,21 @@ public class VoteController extends HttpServlet {
     private void actionDo(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
 
-        String viewPage = null;
-        Command command;
-
         String uri = request.getRequestURI();
         String conPath = request.getContextPath();
         String com = uri.substring(conPath.length());
 
-        if (com.equals("/member_list.do")) {
-            command = new MemberListCommand();
-            command.execute(request, response);
-            viewPage = "member_list.jsp";
-        } else if (com.equals("/vote_submit.do")) {
-            command = new VoteSubmitCommand();
-            command.execute(request, response);
-            viewPage = "vote_list.do";
+        CommandList command = null;
+        for (CommandList item : CommandList.values()) {
+            if (item.getCom().equals(com)) {
+                command = item;
+                break;
+            }
         }
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
-        dispatcher.forward(request, response);
+        if (command != null) {
+            command.getCommand().execute(request, response);
+            RequestDispatcher dispatcher = request.getRequestDispatcher(command.getViewPage());
+            dispatcher.forward(request, response);
+        }
     }
 }

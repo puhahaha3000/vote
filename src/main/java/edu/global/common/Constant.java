@@ -21,6 +21,15 @@ public class Constant {
                 V_TIME AS TIME,
                 V_CONFIRM AS CONFIRM
             FROM TBL_VOTE_202005""";
+    public static final String QUERY_MEMBER_RANK = """
+            SELECT M.M_NO, M_NAME, COUNT
+            FROM TBL_MEMBER_202005 M, (
+                SELECT M_NO, COUNT(*) AS COUNT
+                FROM TBL_VOTE_202005
+                WHERE V_CONFIRM = 'Y'
+                GROUP BY M_NO) V
+            WHERE M.M_NO = V.M_NO
+            ORDER BY COUNT DESC""";
     public static final String SELECT_FROM_TBL_VOTE_202005 = "SELECT * FROM TBL_VOTE_202005";
     public static final String SELECT_FROM_TBL_PARTY_202005 = "SELECT * FROM TBL_PARTY_202005";
     public static final String SELECT_FROM_TBL_MEMBER_202005 = "SELECT * FROM TBL_MEMBER_202005";
