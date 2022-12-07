@@ -15,18 +15,16 @@ public class VoteViewDao implements ConvertableFromResultSet<VoteViewDto> {
 
     @Override
     public VoteViewDto convertToOneRecord(ResultSet resultSet) {
-        VoteViewDto voteViewDto = null;
+        VoteViewDto voteViewDto;
         try {
-            if (resultSet.next()) {
-                voteViewDto = new VoteViewDto(
-                        resultSet.getString("NAME"),
-                        resultSet.getString("BIRTH_DATE"),
-                        resultSet.getString("AGE"),
-                        resultSet.getString("GENDER"),
-                        resultSet.getString("TIME"),
-                        resultSet.getString("CONFIRM")
-                );
-            }
+            voteViewDto = new VoteViewDto(
+                    resultSet.getString("NAME"),
+                    resultSet.getString("BIRTH_DATE"),
+                    resultSet.getString("AGE"),
+                    resultSet.getString("GENDER"),
+                    resultSet.getString("TIME"),
+                    resultSet.getString("CONFIRM")
+            );
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

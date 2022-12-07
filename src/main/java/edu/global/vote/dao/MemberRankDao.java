@@ -15,15 +15,13 @@ public class MemberRankDao implements ConvertableFromResultSet<MemberRankDto> {
 
     @Override
     public MemberRankDto convertToOneRecord(ResultSet resultSet) {
-        MemberRankDto memberRankDto = null;
+        MemberRankDto memberRankDto;
         try {
-            if (resultSet.next()) {
-                memberRankDto = new MemberRankDto(
-                        resultSet.getString("M_NO"),
-                        resultSet.getString("M_NAME"),
-                        resultSet.getString("COUNT")
-                );
-            }
+            memberRankDto = new MemberRankDto(
+                    resultSet.getString("M_NO"),
+                    resultSet.getString("M_NAME"),
+                    resultSet.getString("COUNT")
+            );
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
