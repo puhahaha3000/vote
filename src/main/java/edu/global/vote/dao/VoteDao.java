@@ -16,6 +16,9 @@ public class VoteDao {
                 request.getParameter("V_AREA"),
                 request.getParameter("V_CONFIRM")
         };
+        for (String item : params) {
+            System.out.println("--------------------"+item+"----------------------");
+        }
         CommonDao.execute(query, params);
     }
 }

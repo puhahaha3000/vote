@@ -6,10 +6,9 @@
 </head>
 <body>
 <table>
-
 <c:forEach var="dto" items="${list}">
     <tr>
-        <td>${dto.no}</td>
+        <td>${dto.do}</td>
 
     </tr>
 </c:forEach>

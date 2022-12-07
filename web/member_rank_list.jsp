@@ -86,9 +86,9 @@
 <nav>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <a href="member_list.jsp">후보조회</a>&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="VOTE_SUBMIT.jsp">투표하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="VOTE_LIST.jsp">투표검수조회</a>&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="MEMBER_RANK_LIST.jsp">후보자등수</a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="vote_submit_view.jsp">투표하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="vote_list.jsp">투표검수조회</a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="member_rank_list.jsp">후보자등수</a>&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="VoteMain.jsp">홈으로</a>
 </nav>
 <section>

@@ -2,6 +2,7 @@ package edu.global.vote.command;
 
 public enum CommandList {
     MEMBER_LIST("/member_list.do", new MemberListCommand(), "member_list.jsp"),
+    VOTE_SUBMIT_VIEW("/vote_submit_view.do", new VoteSubmitViewCommand(), "vote_submit_view.jsp"),
     VOTE_SUBMIT("/vote_submit.do", new VoteSubmitCommand(), "index.jsp"),
     VOTE_LIST("/vote_list.do", new VoteListCommand(), "vote_list.jsp"),
     MEMBER_RANK_LIST("/member_rank_list.do", new MemberRankListCommand(), "member_rank_list.jsp");
