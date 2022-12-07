@@ -1,7 +1,6 @@
 package edu.global.vote.dao;
 
 import edu.global.common.Constant;
-import edu.global.vote.dto.VoteDto;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -11,83 +10,91 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class CommonDao {
+    private static final DataSource dataSource;
+    private static Connection connection;
+    private static PreparedStatement preparedStatement;
+    private static ResultSet resultSet;
 
-    static <T> ArrayList<T> getArrayListFromQuery(String query, Function<ResultSet, ArrayList<T>> function) {
+    static {
+        try {
+            Context context = new InitialContext();
+            dataSource = (DataSource) context.lookup(Constant.CONNECT_POOL);
+        } catch (NamingException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    static <T> ArrayList<T> getArrayListFromQuery(String query, ConvertableFromResultSet<T> convertableFromResultSet) {
         ArrayList<T> resultArrayList = new ArrayList<>();
 
         try {
-            Context context = new InitialContext();
-            DataSource dataSource = (DataSource) context.lookup(Constant.CONNECT_POOL);
-
-            Connection connection = null;
-            PreparedStatement preparedStatement = null;
-            ResultSet resultSet = null;
-
-            try {
-                connection = dataSource.getConnection();
-                preparedStatement = connection.prepareStatement(query);
-                resultSet = preparedStatement.executeQuery();
-
-                resultArrayList = function.apply(resultSet);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (resultSet != null) {
-                        resultSet.close();
-                    }
-                    if (preparedStatement != null) {
-                        preparedStatement.close();
-                    }
-                    if (connection != null) {
-                        connection.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (NamingException e) {
+            getConnection(query);
+            resultSet = preparedStatement.executeQuery();
+            resultArrayList = convertableFromResultSet.convertToList(resultSet);
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
 
         return resultArrayList;
     }
 
-    static <T> void insert(String query, T dto, Consumer<Map.Entry<PreparedStatement, T>> consumer) {
+    static void execute(String query, String[] params) {
         try {
-            Context context = new InitialContext();
-            DataSource dataSource = (DataSource) context.lookup(Constant.CONNECT_POOL);
-
-            Connection connection = null;
-            PreparedStatement preparedStatement = null;
-
-            try {
-                connection = dataSource.getConnection();
-                preparedStatement = connection.prepareStatement(query);
-                consumer.accept(new AbstractMap.SimpleEntry<>(preparedStatement, dto));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (preparedStatement != null) {
-                        preparedStatement.close();
-                    }
-                    if (connection != null) {
-                        connection.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (NamingException e) {
+            getConnection(query);
+            setParameter(preparedStatement, params);
+            preparedStatement.execute();
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+    }
+
+    static <T> T getOneDto(String query, String[] params, ConvertableFromResultSet<T> convertableFromResultSet) {
+        T dto = null;
+        try {
+            getConnection(query);
+            setParameter(preparedStatement, params);
+            resultSet = preparedStatement.executeQuery();
+            dto = convertableFromResultSet.convertToOneRecord(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return dto;
+    }
+
+    private static void getConnection(String query) throws SQLException {
+        connection = dataSource.getConnection();
+        preparedStatement = connection.prepareStatement(query);
+    }
+
+    private static void closeConnection() {
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void setParameter(PreparedStatement preparedStatement, String[] params) throws SQLException {
+        for (int i = 0; i < params.length; i++) {
+            preparedStatement.setString(i + 1, params[i]);
         }
     }
 }

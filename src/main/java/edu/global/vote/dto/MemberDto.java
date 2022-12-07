@@ -1,7 +1,5 @@
 package edu.global.vote.dto;
 
-import java.util.HashMap;
-
 public class MemberDto {
     private String no;
     private String name;
@@ -10,18 +8,12 @@ public class MemberDto {
     private String jumin;
     private String city;
     private String tel;
-    private final HashMap<String, String> schoolMap = new HashMap<>();
 
     public MemberDto(String no, String name, String party, String school, String jumin, String city, String tel) {
-        schoolMap.put("1", "고졸");
-        schoolMap.put("2", "학사");
-        schoolMap.put("3", "석사");
-        schoolMap.put("4", "박사");
-
         this.no = no;
         this.name = name;
         this.party = party;
-        this.school = schoolMap.get(school);
+        this.school = school;
         this.jumin = jumin;
         this.city = city;
         this.tel = tel;
@@ -56,7 +48,7 @@ public class MemberDto {
     }
 
     public void setSchool(String school) {
-        this.school = schoolMap.get(school);
+        this.school = school;
     }
 
     public String getJumin() {
