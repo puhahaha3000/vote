@@ -2,7 +2,7 @@ package edu.global.common;
 
 public class Constant {
     public static final String CONNECT_POOL = "java:comp/env/jdbc/oracle/vote";
-    public static final String QUERY_MEMBER_LIST = "SELECT M_NO, M_NAME, P_NAME, P_SCHOOL, M_JUMIN, M_CITY, TRIM(P_TEL1)||'-'||P_TEL2||'-'||P_TEL3\n" +
+    public static final String QUERY_MEMBER_LIST = "SELECT M_NO, M_NAME, P_NAME, P_SCHOOL, M_JUMIN, M_CITY, TO_CHAR(P_TEL1, 'FM909')||'-'||P_TEL2||'-'||P_TEL3 AS TEL\n" +
             "            FROM TBL_MEMBER_202005 M, TBL_PARTY_202005 P\n" +
             "            WHERE M.P_CODE = P.P_CODE";
     public static final String QUERY_INSERT_VOTE = "INSERT INTO TBL_VOTE_202005\n" +

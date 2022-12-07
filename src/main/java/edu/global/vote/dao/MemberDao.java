@@ -16,19 +16,17 @@ public class MemberDao implements ConvertableFromResultSet<MemberDto> {
 
     @Override
     public MemberDto convertToOneRecord(ResultSet resultSet) {
-        MemberDto memberDto = null;
+        MemberDto memberDto;
         try {
-            if (resultSet.next()) {
-                memberDto = new MemberDto(
-                        resultSet.getString("M_NO"),
-                        resultSet.getString("M_NAME"),
-                        resultSet.getString("P_NAME"),
-                        resultSet.getString("P_SCHOOL"),
-                        resultSet.getString("M_JUMIN"),
-                        resultSet.getString("M_CITY"),
-                        resultSet.getString("TEL")
-                );
-            }
+            memberDto = new MemberDto(
+                    resultSet.getString("M_NO"),
+                    resultSet.getString("M_NAME"),
+                    resultSet.getString("P_NAME"),
+                    resultSet.getString("P_SCHOOL"),
+                    resultSet.getString("M_JUMIN"),
+                    resultSet.getString("M_CITY"),
+                    resultSet.getString("TEL")
+            );
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
