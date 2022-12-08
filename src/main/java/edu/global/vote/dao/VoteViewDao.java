@@ -22,6 +22,7 @@ public class VoteViewDao implements ConvertableFromResultSet<VoteViewDto> {
                     resultSet.getString("BIRTH_DATE"),
                     resultSet.getString("AGE"),
                     resultSet.getString("GENDER"),
+                    resultSet.getString("MEMBER_NO"),
                     resultSet.getString("TIME"),
                     resultSet.getString("CONFIRM")
             );

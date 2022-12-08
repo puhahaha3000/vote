@@ -13,6 +13,9 @@ public class VoteListCommand implements Command{
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         VoteViewDao voteViewDao = new VoteViewDao();
         ArrayList<VoteViewDto> voteViewDtoArrayList = voteViewDao.getList();
+        for (VoteViewDto item : voteViewDtoArrayList) {
+            System.out.println(item);
+        }
         request.setAttribute("list", voteViewDtoArrayList);
     }
 }

@@ -3,7 +3,7 @@ package edu.global.vote.dto;
 public class VoteDto {
     String voteJumin;
     String voteName;
-    String member_No;
+    String memberNo;
     String voteTime;
     String voteArea;
     String voteConfirm;
@@ -13,17 +13,17 @@ public class VoteDto {
         return "VoteDto{" +
                 "voteJumin='" + voteJumin + '\'' +
                 ", voteName='" + voteName + '\'' +
-                ", member_No='" + member_No + '\'' +
+                ", memberNo='" + memberNo + '\'' +
                 ", voteTime='" + voteTime + '\'' +
                 ", voteArea='" + voteArea + '\'' +
                 ", voteConfirm='" + voteConfirm + '\'' +
                 '}';
     }
 
-    public VoteDto(String voteJumin, String voteName, String member_No, String voteTime, String voteArea, String voteConfirm) {
+    public VoteDto(String voteJumin, String voteName, String memberNo, String voteTime, String voteArea, String voteConfirm) {
         this.voteJumin = voteJumin;
         this.voteName = voteName;
-        this.member_No = member_No;
+        this.memberNo = memberNo;
         this.voteTime = voteTime;
         this.voteArea = voteArea;
         this.voteConfirm = voteConfirm;
@@ -45,12 +45,12 @@ public class VoteDto {
         this.voteName = voteName;
     }
 
-    public String getMember_No() {
-        return member_No;
+    public String getMemberNo() {
+        return memberNo;
     }
 
-    public void setMember_No(String member_No) {
-        this.member_No = member_No;
+    public void setMemberNo(String memberNo) {
+        this.memberNo = memberNo;
     }
 
     public String getVoteTime() {
